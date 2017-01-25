@@ -60,7 +60,7 @@ An interesting class of HA schemes (considered in the library) are
 those that offer _efficient verification_. The difference is that the
 __Verify__ algorithm can be "split" in two algorithms:
 
-- __VerifyPrep(__ _vk_, _f_, _L1, ..., _Ln_ __)__--> _vk_<sub>_f_</sub>,
+- __VerifyPrep(__ _vk_, _f_, _L1_, ..., _Ln_ __)__--> _vk_<sub>_f_</sub>,
   which returns a verification key bound to the function _f_ and its
   input labels.
 - __Verify(__ _vk_<sub>_f_</sub>, _D_, _x_, _s_ __)__, which on
