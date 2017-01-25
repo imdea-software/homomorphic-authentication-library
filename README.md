@@ -190,12 +190,12 @@ this utility do the following:
 1. Write a generic function in a file using the instruction and model given in the
 `test/func_model` file.
 
-2. Run *./createFunction* with the file you just wrote as parameter. Do it from
-inside the test folder.
+2. Run `$ test/createFunction test/func_file` with the file you just
+wrote (e.g., `test/func_file`) as parameter.
 
 3. Run $ make test2
 
-4. Run the *sampleTest2* executable that was created to test the computation.
+4. Run the *test/sampleTest2* executable that was created to test the computation.
 
 If you wish to use the compiled functions in your own code, you can
 stop at step 2 and use the code in `test/sample_test2.c` as reference.
