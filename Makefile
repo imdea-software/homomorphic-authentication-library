@@ -134,3 +134,4 @@ install:
 clean:
 	rm -f $(OTEST_PTH)/*.o $(OHMC_PTH)/*.o $(OTOOL_PTH)/*.o $(OUTIL_PTH)/*.o
 	rm -f test/sampleTest test/sampleTest2 test/createFunction
+	rm -f lib/libhal-crypto.a

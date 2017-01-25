@@ -126,6 +126,8 @@ After GMP, RELIC and FLINT are installed (they are supposed to be in
 /usr/local, this can be changed in the Makefile), you can build the
 library by running:
 
+$ bash configure
+
 $ make hal-crypto
 
 ### Using HAL as a library
