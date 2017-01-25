@@ -1,0 +1,54 @@
+/* 
+
+Write a function in C that takes as inputs: 
+	--> TYPE ** inputs 
+	--> int size
+And as output:
+	-->TYPE * output
+
+You have a certain number of generic functions at your disposal:
+	- int TYPE_add(TYPE * out, TYPE * in1, TYPE * in2)
+	- int TYPE_mul(TYPE * out, TYPE * in1, TYPE * in2)
+	- int TYPE_copy(TYPE * out, TYPE * in)
+	- int TYPE_new(TYPE * element)
+	- int TYPE_free(TYPE * element)
+
+To create a new TYPE element,
+	TYPE * element = malloc(sizeof(*element));
+	TYPE_new(element);
+To free a TYPE element,
+	TYPE_free(element);
+
+*/
+
+
+int func_TYPE (TYPE * output, TYPE ** inputs, bn_t * coefficients, int size)
+{
+
+	/***** WRITE YOUR CODE BELOW *****/
+
+	// Temporary variable
+	TYPE * temp = malloc(sizeof(*temp));
+	TYPE_new(temp);
+
+	TYPE_copy(output, inputs[0]);
+	for (int i = 1; i <  size ; ++i)
+	{
+		TYPE_add(output, output, inputs[i]);
+	}
+	for (int i = 1; i <  size; ++i)
+	{
+		TYPE_mul(temp, inputs[i-1], inputs[i]);
+		TYPE_const_mult(temp, temp, coefficients[i]);
+		TYPE_add(output, output, temp);
+	}
+
+	// Clean up
+
+	TYPE_free(temp);
+
+	/**** END OF WRITING, DON'T EVEN DARE ******/
+
+
+	return 0;
+}

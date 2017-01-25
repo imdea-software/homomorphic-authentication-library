@@ -1,0 +1,13 @@
+MACHINE_TYPE=`uname -m`
+if [ ${MACHINE_TYPE} == 'x86_64' ]; then
+  sed -i 's/64/ARCHITECTURE/g' include/utils/bn_ext.h
+else
+  sed -i 's/32/ARCHITECTURE/g' include/utils/bn_ext.h
+fi
+if [ ${MACHINE_TYPE} == 'x86_64' ]; then
+  sed -i 's/ARCHITECTURE/64/g' include/utils/bn_ext.h
+else
+  sed -i 's/ARCHITECTURE/32/g' include/utils/bn_ext.h
+fi
+
+
