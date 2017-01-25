@@ -2,10 +2,6 @@
 #define _fgp_keys_H_
 #include "fgp_keys.h"
 #endif
-#ifndef _fgp_poly_H_
-#define _fgp_poly_H_
-#include "fgp_poly.h"
-#endif
 
 #ifndef _fgp_msg_H_
 #define _fgp_msg_H_

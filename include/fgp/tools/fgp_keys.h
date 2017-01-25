@@ -4,7 +4,7 @@
 #endif
 
 /*! \file fgp_keys.h
-    \brief File describing the key structure.
+    \brief File describing the keys structure.
     
 	Handling of the public and private key structures.
 	The public key stores relic configuration variables as well as polynomial degrees.
@@ -21,7 +21,7 @@
  */
 typedef struct
 {
-	// Ciphertext degree
+	// Polynomial degree
 	int degree;
 	// Relic curve identifier
 	int curve;

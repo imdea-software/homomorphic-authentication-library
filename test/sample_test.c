@@ -4,15 +4,15 @@ int main(int argc, char **argv)
 {
 	/**
 	
-	The computation that is performed on the cipherexts in this example is as follows:
+	The computation that is performed on the messages in this example is as follows:
 
 	(c_0·a_0 + .. c_n·a_n) + (c_0·c_1 + .. + c_{n-1}·c_n)
 
-	where c_i are the ciphertexts and a_i some coefficients.
+	where c_i are the message polynomials and a_i some integer coefficients.
 
 	**/
 
-	// INITIALIZE
+	// INITIALIZE THE FGP SCHEME
 	
 	if (fgp_init())
 	{
@@ -36,7 +36,7 @@ int main(int argc, char **argv)
 		label(delta[i], i);				// Creates a string containing the number i
 	}
 	
-	// Create some coefficients to use in a function
+	// Create some random coefficients to define the function
 
 	// Get the order of the elliptic curve groups
 
@@ -52,7 +52,7 @@ int main(int argc, char **argv)
 	}
 
 
-	// CREATE A RANDOM SECRET KEY
+	// KEY GENERATION
 
 	fgp_private_key * key = malloc(sizeof(*key));
 	skey_new(key);
@@ -60,7 +60,7 @@ int main(int argc, char **argv)
 
 
 	// COMPUTE THE VERIFICATION KEYS
-	// And a unique string identifier for each ciphertext within this data set: L[i]
+	// And a unique label for each input i: L[i]
 
 	fgp_vkf ** ver_keys = malloc(sizeof(*ver_keys)* size);
 	char ** L = malloc(sizeof(char*)*size);
@@ -79,7 +79,7 @@ int main(int argc, char **argv)
 
 
 	// VERIFICATION PREPARATION
-	// Done ahead of time, without knowing the ciphertexts
+	// Done ahead of time, without knowing the computations' inputs
 
 	fgp_vkf * Wf = malloc(sizeof(*Wf));
 	fgp_vkf_new(Wf);
@@ -93,25 +93,35 @@ int main(int argc, char **argv)
 		fgp_vkf_add(Wf, Wf, vkf_tmp);
 	}
 
-
-	// Create some ciphertexts (polynomials of degree 1 or less in Y)
-	// And compute the function on them
-
-	fgp_tag ** tags = malloc(sizeof(fgp_tag *)*size);
-	fgp_tag ** sigma = malloc(sizeof(fgp_tag *)*datasets);
-
-	fgp_msg *** ciphers = malloc(sizeof(fgp_msg **)*datasets);
+	// INPUT GENERATION
+	// This is a matrix of messages; the function will be applied to every row
+	
+	// Allocate and initialize messages
+	fgp_msg *** msgs = malloc(sizeof(fgp_msg **)*datasets);
 	for (int i = 0; i < datasets; ++i)
 	{
-		ciphers[i] = malloc(sizeof(fgp_msg*)*size);
+		msgs[i] = malloc(sizeof(fgp_msg*)*size);
 		for (int j = 0; j < size; ++j)
 		{
-			ciphers[i][j] = malloc(sizeof(*ciphers[i][j]));
-			fgp_msg_new(ciphers[i][j]);
+			msgs[i][j] = malloc(sizeof(*msgs[i][j]));
+			fgp_msg_new(msgs[i][j]);
 		}
 	}
-	fgp_msg ** c_out = malloc(sizeof(fgp_msg *)*datasets);
+	// vector of computation's outputs
+	fgp_msg ** m_out = malloc(sizeof(fgp_msg *)*datasets);
 
+	// Allocate and initialize tags for input messages
+	fgp_tag ** tags = malloc(sizeof(fgp_tag *)*size);
+	for (int i = 0; i < size; ++i)
+	{
+		tags[i] = malloc(sizeof(*tags[i]));
+		fgp_tag_new(tags[i]);
+		
+	}
+	// vector of computation's outputs tags
+	fgp_tag ** sigma = malloc(sizeof(fgp_tag *)*datasets);
+	
+	
 	// Temporary variables for the computation
 
 	fgp_tag * tag_tmp = malloc(sizeof(*tag_tmp));
@@ -120,41 +130,36 @@ int main(int argc, char **argv)
 	fgp_msg * poly_tmp = malloc(sizeof(*poly_tmp));
 	fgp_msg_new(poly_tmp);
 
-	for (int i = 0; i < size; ++i)
-	{
-		tags[i] = malloc(sizeof(*tags[i]));
-		fgp_tag_new(tags[i]);
-
-		//ciphers[i] = malloc(sizeof(*ciphers[i]));
-		//fgp_msg_new(ciphers[i]);
-	}
-
+	
 	int check;
+
+	// COMPUTATION
+	
+	// Create some messages (as polynomials of degree 1 or less in Y)
+	// And compute the function on them
 
 	for (int j = 0; j < datasets; ++j)
 	{
 		for (int i = 0; i < size; ++i)
 		{
-			// Creation of ciphertexts
-			fgp_msg_rand(ciphers[j][i], 100, 1);
-			// Authentication
-			fgp_authenticate(tags[i], key, delta[j], L[i], ciphers[j][i]);
+			// generate random message
+			fgp_msg_rand(msgs[j][i], 100, 1);
+			// Authenticate
+			fgp_authenticate(tags[i], key, delta[j], L[i], msgs[j][i]);
 		}
 
-		// Ciphertext computation
+		// Computation on messages
 
-		c_out[j] = malloc(sizeof(*c_out[j]));
-		fgp_msg_new(c_out[j]);
+		m_out[j] = malloc(sizeof(*m_out[j]));
+		fgp_msg_new(m_out[j]);
 
-		//fgp_msg_const_mult(c_out[j], ciphers[j][0], coefficients[0]);
-		
 		for (int i = 0; i < size; ++i)
 		{
-			fgp_msg_const_mult(poly_tmp, ciphers[j][i], coefficients[i]);
-			fgp_msg_add(c_out[j], c_out[j], poly_tmp);
+			fgp_msg_const_mult(poly_tmp, msgs[j][i], coefficients[i]);
+			fgp_msg_add(m_out[j], m_out[j], poly_tmp);
 		}
 
-		// Tag computation
+		// Computation on tags
 
 		sigma[j] = malloc(sizeof(*sigma[j]));
 		fgp_tag_new(sigma[j]);
@@ -167,10 +172,11 @@ int main(int argc, char **argv)
 			fgp_tag_add(sigma[j], sigma[j], tag_tmp);
 		}
 
-		// Verification
+		// VERIFICATION OF THE j-th FUNCTION
 		check = 0;
 
-		fgp_verify(&check, key, delta[j], Wf, c_out[j], sigma[j]);
+		printf("Dataset %s: ", delta[j]);
+		fgp_verify(&check, key, delta[j], Wf, m_out[j], sigma[j]);
 
 		if (check == 0)
 			printf("Verification FAILED\n");
@@ -185,25 +191,24 @@ int main(int argc, char **argv)
 	for (int i = datasets-1; i >= 0; --i)
 	{
 		free(delta[i]);
-		fgp_msg_free(c_out[i]);
+		fgp_msg_free(m_out[i]);
 		fgp_tag_free(sigma[i]);
-		//fgp_tag_free(tag_tmp[i]);
-		//fgp_msg_free(poly_tmp[i]);
 	}
 	fgp_tag_free(tag_tmp);
 	fgp_msg_free(poly_tmp);
 	free(sigma);
-	free(c_out);
+	free(m_out);
 	free(delta);
 
 	for (int i = size-1; i >= 0; --i)
 	{
 		fgp_tag_free(tags[i]);
 		fgp_vkf_free(ver_keys[i]);
-		//fgp_msg_free(ciphers[i]);
+		for(int j= datasets-1; j>=0; --j)
+			fgp_msg_free(msgs[j][i]);
 		free(L[i]);
 	}
-	//free(ciphers);
+	free(msgs);
 	free(tags);
 	free(ver_keys);
 	free(L);

@@ -56,7 +56,7 @@ int main(int argc, char **argv)
     }
 
     fputc((int) '\n', c_file);
-    // Go back to the begining of the f_file
+    // Go back to the beginning of the f_file
     rewind(f_file);
 
 
@@ -91,7 +91,7 @@ int main(int argc, char **argv)
     rewind(f_file);
 
 
-    // Loop with fgp_poly
+    // Loop with fgp_msg
      while (fscanf(f_file, "%c", word) != EOF)
     {
         if (*word != 'T' )

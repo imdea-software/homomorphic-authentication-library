@@ -6,8 +6,9 @@
 /*! \file fgp_tag.h
     \brief File describing the Tag structure.
     
-	A tag is an object authentifying a ciphertext and a private key.
-	It can be of degree 1 or 2 depending on the ciphertext.  
+	A tag is an object authenticating a message (polynomial) and a private key.
+	A tag can be of degree 1 or 2, where the degree corresponds to the degree of
+	variable Y in the authenticated polynomial.
 
     \ingroup tools
 */

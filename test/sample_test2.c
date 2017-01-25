@@ -5,16 +5,11 @@
 int main(int argc, char **argv)
 {
 	/**
-	
-	The computation that is performed on the cipherexts in this example is as follows:
-
-	(c_0·a_0 + .. c_n·a_n) + (c_0·c_1 + .. + c_{n-1}·c_n)
-
-	where c_i are the ciphertexts and a_i some coefficients.
-
+	 * Usage example of the library with the compiler for homomorphic computations.
+	 * It assumes the functions to be already generated and available in function.h
 	**/
 
-	// INITIALIZE
+	// INITIALIZE THE FGP SCHEME
 	
 	if (fgp_init())
 	{
@@ -31,6 +26,7 @@ int main(int argc, char **argv)
 	bn_new(order);
 	g1_get_ord(order);
 
+	// FUNCTION COEFFICIENTS GENERATION
 	// Create some coefficients to use in a function
 
 	int size = 100;
@@ -42,7 +38,8 @@ int main(int argc, char **argv)
 		bn_rand_mod(coefficients[i], order);
 	}
 
-	// Create some ciphertexts (polynomials of degree 1 or less in Y)
+	// INPUT GENERATION
+	// Create some messages (polynomials of degree 1 or less in Y)
 	// As well as a unique string identifier for these ciphertexts: delta
 	// And a unique string identifier for each ciphertext within this data set: L[i]
 
@@ -50,31 +47,53 @@ int main(int argc, char **argv)
 
 	char ** L = malloc(sizeof(char*)*size);
 
-	fgp_msg ** ciphers = malloc(sizeof(fgp_msg *)*size);
+	fgp_msg ** msgs = malloc(sizeof(fgp_msg *)*size);
 
 	for (int i = 0; i < size; ++i)
 	{
-		ciphers[i] = malloc(sizeof(*ciphers[i]));
+		msgs[i] = malloc(sizeof(*msgs[i]));
 
 		L[i] = malloc(sizeof(char)*MAX_STR_SIZE);
 		label(L[i], i);		// Creates a string containing the number i
 
-		fgp_msg_new(ciphers[i]);
-		fgp_msg_rand(ciphers[i], 20, 1);
+		fgp_msg_new(msgs[i]);
+		fgp_msg_rand(msgs[i], 20, 1);
 	}
 
-	// Ciphertext computations
+	// COMPUTATION
 
 	fgp_msg * c_out = malloc(sizeof(*c_out));
 	fgp_msg_new(c_out);
 
-	func_fgp_msg(c_out, ciphers, coefficients, size);
+	func_fgp_msg(c_out, msgs, coefficients, size);
 
-	// CREATE A RANDOM SECRET KEY
+	
+	// SECRET KEY GENERATION
 
 	fgp_private_key * key = malloc(sizeof(*key));
 	skey_new(key);
 	skey_gen(key);
+	
+	// VERIFICATION PREPARATION
+	
+	// Generate the verification key
+	
+	fgp_vkf ** ver_keys = malloc(sizeof(*ver_keys)* size);
+	
+	for (int i = 0; i <  size; ++i)
+	{
+		ver_keys[i] = malloc(sizeof(*ver_keys[i]));
+		fgp_vkf_new(ver_keys[i]);
+		
+		fgp_vkf_set(ver_keys[i], key, L[i]);
+	}
+	
+	// and compute over them
+	
+	fgp_vkf * Wf = malloc(sizeof(*Wf));
+	fgp_vkf_new(Wf);
+	func_fgp_vkf(Wf, ver_keys, coefficients, size);
+	
 
 	// AUTHENTICATION
 
@@ -85,27 +104,10 @@ int main(int argc, char **argv)
 		tags[i] = malloc(sizeof(*tags[i]));
 		fgp_tag_new(tags[i]);
 
-		fgp_authenticate(tags[i], key, delta, L[i], ciphers[i]);
+		fgp_authenticate(tags[i], key, delta, L[i], msgs[i]);
 	}	
 
-	// COMPUTE THE VERIFICATION KEYS
-
-	fgp_vkf ** ver_keys = malloc(sizeof(*ver_keys)* size);
-
-	for (int i = 0; i <  size; ++i)
-	{
-		ver_keys[i] = malloc(sizeof(*ver_keys[i]));
-		fgp_vkf_new(ver_keys[i]);
-		
-		fgp_vkf_set(ver_keys[i], key, L[i]);
-	}
-
-	// VERIFICTION PREPARATION
-
-	fgp_vkf * Wf = malloc(sizeof(*Wf));
-	fgp_vkf_new(Wf);
-
-	func_fgp_vkf(Wf, ver_keys, coefficients, size);
+	
 
 	// TAG COMPUTATION
 
@@ -133,10 +135,10 @@ int main(int argc, char **argv)
 	{
 		fgp_tag_free(tags[i]);
 		fgp_vkf_free(ver_keys[i]);
-		fgp_msg_free(ciphers[i]);
+		fgp_msg_free(msgs[i]);
 		free(L[i]);
 	}
-	free(ciphers);
+	free(msgs);
 	free(tags);
 	free(ver_keys);
 

@@ -10,7 +10,7 @@
 /*! \file fgp.h
     \brief File descibing initialization and closing of the fgp context.
      
-	The files is the parent of the three fgp files describing the algorithm functions.
+	The file is the parent of the three fgp files describing the algorithm functions.
 
     \ingroup fgp
 */

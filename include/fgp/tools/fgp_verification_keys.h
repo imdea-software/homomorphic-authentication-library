@@ -23,9 +23,9 @@
 
 /*! \struct fgp_vkf
  *  Bivariate polynomials of degree 2 or less.
- *	The polynomial takes the from: \f$ r(A,B) = c + c_{a}·A + c_{b}·B + c_{ab}·A·B + c_{a^2}·A^2 + c_{b^2}·B^2\f$.\n
- * 	A basic verification key is created with degree with two coefficients \f$ c_a,c_b \f$ outputs of the prf.
- *	The degree two is obtained through multplication by two degree one fgp_keys, and the constant term corresponds to an addtion by constant.
+ *	The polynomial takes the form: \f$ r(A,B) = c + c_{a}·A + c_{b}·B + c_{ab}·A·B + c_{a^2}·A^2 + c_{b^2}·B^2\f$.\n
+ * 	A basic verification key is created with degree 1 with two coefficients \f$ c_a,c_b \f$ outputs of the prf.
+ *	The degree two is obtained through multplication by two degree-1 fgp_vkf, and the constant term corresponds to an addtion by constant.
  */
 typedef struct
 {
