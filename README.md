@@ -26,13 +26,13 @@ algorithms:
   authentication key _sk_, and a verification key _vk_. If _vk_ can be
   publicly released the HA is called a _homomorphic signature_,
   otherwise the scheme is called a _homomorphic MAC_.
-- __Auth(___sk_, _D_, _L_, _x_ __)__-->_s_, which on input the secret
+- __Auth(__ _sk_, _D_, _L_, _x_ __)__ -->_s_, which on input the secret
 authentication key _sk_, a dataset name _D_, an input label _L_ (a
 string), and a message _x_, returns an authentication tag _s_.
-- __Eval(___f_, _s1_,...,_sn_ __)__-->_s_, which on input the
+- __Eval(__ _f_, _s1_,...,_sn_ __)__-->_s_, which on input the
   description of an n-to-1 function _f_, and _n_ authentication tags
   _s1_,...,_sn_, returns a new authentication tag _s_ for the result.
-- __Verify(___vk_, _f_, _L1, ..., _Ln_, _D_, _x_, _s_ __)__, which on input the
+- __Verify(__ _vk_, _f_, _L1, ..., _Ln_, _D_, _x_, _s_ __)__, which on input the
   verification key _vk_, the description of function _f_ with input
   labels _L1_, ..., _Ln_, a dataset name _D_, a message  _x_ and an
   authentication tag  _s_, returns _accept_ or _reject_.
