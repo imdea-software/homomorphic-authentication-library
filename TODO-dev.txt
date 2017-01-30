@@ -1,1 +1,9 @@
+New features (by tentative priority):
+
 - Add implementation of CF13 Homomorphic MAC
+
+- Secure RNG
+
+- Add implementation of CF13b Homomorphic MAC
+
+- Add implementation of one linearly-homomorphic signature (e.g., CFW12)
