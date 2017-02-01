@@ -70,7 +70,7 @@ RELIC_DEPS = $( patsubst %, $(RELIC_PTH)$(IDIR)/%, $(_RELIC_DEPS) )
 FLINT_DEPS = $( patsubst %, $(FLINT_PTH)$(IDIR)/flint/%, $(_FLINT_DEPS) )
 
 # HAL utils
-_UTIL_DEPS = error_hdl.h utils.h bn_ext.h types.h prf.h
+_UTIL_DEPS = error_hdl.h utils.h bn_ext.h types.h prf.h rng.h
 UTIL_DEPS = $( patsubst %, $(IUTIL_PTH)/%, $(_UTIL_DEPS) )
 
 # FGP scheme deps
@@ -106,7 +106,7 @@ OBJ_FUNC_EXEC = $(patsubst %,$(OTEST_PTH)/%,$(_OBJ_FUNC_EXEC))
 OBJ_CFSAMPLE_EXEC = $(patsubst %,$(OTEST_PTH)/%,$(_OBJ_CFSAMPLE_EXEC))
 
 # HAL utils objects
-_OBJ_UTIL = error_hdl.o bn_ext.o types.o prf.o
+_OBJ_UTIL = error_hdl.o bn_ext.o types.o prf.o rng.o
 OBJ_UTIL = $(patsubst %,$(OUTIL_PTH)/%,$(_OBJ_UTIL))
 
 # FGP scheme objects

@@ -23,13 +23,9 @@ int cf13_msg_free(cf13_msg * m)
 
 int cf13_msg_rand(cf13_msg * m)
 {
-	//not good/secure random number generation 
-	flint_rand_t state;
-	flint_randinit(state);
-
-	fq_randtest(m->msg, state, m->ctx);
+	if(hal_get_rand_fq(m->msg, m->ctx))
+		return 1;
 	
-	flint_randclear(state);
 	return 0;
 }
 

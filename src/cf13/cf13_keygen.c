@@ -3,24 +3,13 @@
 int cf13_skey_gen(cf13_private_key *key)
 {
 	// Take random K
-	rand_bytes(key->K, key->size);
+	if(hal_get_rand_bytes(key->K, key->size))
+		return 1;
 	
 	// Choose random x
 	
-	/*
-	 * Random generation using FLINT should
-	 * be replaced.
-	 */
-	flint_rand_t state;
-	flint_randinit(state);
-	
-	
-	
-	fq_randtest(key->x, state, key->ctx);
-	
-	//fq_print(key->x, key->ctx);
-	
-	flint_randclear(state);
+	if(hal_get_rand_fq(key->x, key->ctx))
+		return 1;
 	
 	return 0;
 }

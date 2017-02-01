@@ -1,6 +1,6 @@
 #include "cf13_prf.h"
 
-cf13_prf(fq_t r, fq_ctx_t ctx, char * input, uint8_t * key, int key_size)
+int cf13_prf(fq_t r, fq_ctx_t ctx, char * input, uint8_t * key, int key_size)
 {
 	int in_size;
 	uint8_t * byte_input  = char_to_uint8_t(&in_size, input);
@@ -45,7 +45,7 @@ cf13_prf(fq_t r, fq_ctx_t ctx, char * input, uint8_t * key, int key_size)
 	//first convert from uint8_t to char
 	char * exp_out_c = malloc(sizeof(char)*(byte_number*2+1));
 	uint8_t_to_hex(exp_out_c, exp_out, byte_number);
-	exp_out_c[byte_number*2] = NULL;
+	exp_out_c[byte_number*2] = '\0';
 	
 	//convert into an integer
 	fmpz_t temp;

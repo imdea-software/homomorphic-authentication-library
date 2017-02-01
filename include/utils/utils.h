@@ -7,6 +7,11 @@
 #include "prf.h"
 #endif
 
+#ifndef _RNG_H_
+#define _RNG_H_
+#include "rng.h"
+#endif
+
 /**
  *	\defgroup utils Utilities
  */
