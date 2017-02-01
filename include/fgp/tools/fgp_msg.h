@@ -6,7 +6,7 @@
 /*! \file fgp_msg.h
     \brief File describing the structure of fgp messages, that are bivariate polynomials.
     
-    The main purpose of the functions on messages (appart from allocation etc..)
+    The main purpose of the functions on messages (apart from allocation etc..)
     is to evaluate them for the authentication and verification processes as the polynomials
     are in effect reduced to their evaluation in (beta, alpha) from the key.
 

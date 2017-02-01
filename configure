@@ -13,10 +13,13 @@ fi
 mkdir lib
 mkdir obj
 cd obj
+mkdir cf13
 mkdir fgp
 mkdir utils
 cd fgp
 mkdir tools
+cd ../
+cd cf13
+mkdir tools
 cd ../../test
 mkdir obj
-

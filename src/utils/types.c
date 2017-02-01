@@ -138,6 +138,21 @@ int uint8_t_to_hex (char * hex_array, uint8_t * byte_array , int byte_size)
 	return 0;
 }
 
+
+int uint8_t_to_fmpz_t(fmpz_t out_v, uint8_t * byte_array , int byte_size)
+{
+	//convert from uint8_t to char in HEX
+	char * v_c = malloc(sizeof(char)*(byte_size*2+1));
+	uint8_t_to_hex(v_c, byte_array, byte_size);
+	v_c[byte_size*2] = '\0';
+	
+	//convert into an integer
+	if(fmpz_set_str(out_v, v_c, 16))
+		return 1;
+	
+	return 0;
+}
+
 int uint8_t_copy(uint8_t * out, uint8_t in, int nb_bits)
 {
 	if (nb_bits >= 8)

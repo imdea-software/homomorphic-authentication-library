@@ -1,8 +1,8 @@
 New features (by tentative priority):
 
-- Add implementation of CF13 Homomorphic MAC
+- CF13 Homomorphic MAC: implement read/write functions
 
-- Secure RNG
+- RNG: now it is based on RELIC rand_bytes. We could make it library-independent, e.g., by reading /dev/urandom
 
 - Add implementation of CF13b Homomorphic MAC
 

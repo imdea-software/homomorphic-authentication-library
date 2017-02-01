@@ -2,6 +2,7 @@
 #include <inttypes.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <fmpz.h>
 
 #include "error_hdl.h"
 
@@ -101,6 +102,14 @@ int hex_to_uint8_t (uint8_t * byte_array , char * hex_array, int byte_size);
  * @param[in] byte_size 		Size of the input byte array.
  */
 int uint8_t_to_hex (char * hex_array, uint8_t * byte_array , int byte_size);
+
+/**
+ * Tranforms a byte array into an fmpz_t integer.
+ * @param[out] out_v			fmpz_t integer.
+ * @param[in] byte_array 		Pointer to the byte array.
+ * @param[in] byte_size 		Size of the input byte array.
+ */
+int uint8_t_to_fmpz_t (fmpz_t out_v, uint8_t * byte_array , int byte_size);
 
 /**
  * Copy the nb_bits first BITS of in into out.
