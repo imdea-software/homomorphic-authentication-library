@@ -75,7 +75,7 @@ int hal_get_randlen_fmpz(fmpz_t r, int bits)
 	int rm = bits%8;
 	if(rm>0)
 	{
-		v[0] |= 1;
+		v[0] |= (1<<(rm-1));
 		for(int j=rm; j<8; ++j)
 			v[0] &= ~(1 << j);
 	}
