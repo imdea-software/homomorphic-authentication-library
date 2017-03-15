@@ -88,8 +88,8 @@ details). This is the scheme implicitly described in \[FGP14].
 	messages taken by __Verify__ are expected to have degree at most _2_
 	in _Y_ and _2*d_ in _X_. The class of functions _f_ supported by this
 	scheme are arithmetic circuits of multiplicative depth _1_
-	(degree_2_) where additions and multiplications are over the ring
-	_Z[X,Y]/qZ_. The special case in which the message values are
+	(degree _2_) where additions and multiplications are over the ring
+	_Z[X,Y]/qZ_. In the special case in which the message values are
 	constant polynomials (i.e., of degree 0 in both X and Y), the
 	scheme almost matches the homomorphic MAC described in \[BFR13].
 
@@ -167,7 +167,7 @@ Tutorials
 
 The library includes some usage examples.
 
-###Basic usage
+### Basic usage
 
 `test/sample_test.c` contains a usage example of the library. The code simulates 
 homomorphic encryption by generating random ciphertexts and applying a degree 2
@@ -180,7 +180,8 @@ $ make test
 This will create the `test/sampleTest` executable which should, when run, print
 *Verification SUCCESSFUL* to standard output.
 
-###Compiler for homomorphic computations
+### Compiler for homomorphic computations
+
 The library makes available a tool for writing the code of a function
 in a generic way, and for compiling this code into C code for
 executing this function over the message space, the authentication
