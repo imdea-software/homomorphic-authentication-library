@@ -93,6 +93,13 @@ details). This is the scheme implicitly described in \[FGP14].
 	constant polynomials (i.e., of degree 0 in both X and Y), the
 	scheme almost matches the homomorphic MAC described in \[BFR13].
 
+3. __cf13__. The homomorphic MAC for arithmetic circuits described in
+\[CF13].
+
+	The message space of this scheme is the ring _Z/qZ_, where _q_ is
+	an arbitrary prime number whose bitsize determines the security of
+	the scheme.
+	
 2.  A collection of utilities that can be common to several schemes, such
 as the implementation of a PRF mapping binary strings into integers in a
 finite ring, and a tool that allows to write a (degree-2) algorithm
@@ -169,16 +176,19 @@ The library includes some usage examples.
 
 ### Basic usage
 
-`test/sample_test.c` contains a usage example of the library. The code simulates 
-homomorphic encryption by generating random ciphertexts and applying a degree 2
-computation on them. The result is then checked.
+`test/sample_test.c` contains a usage example of the library with the
+__fgp__ scheme. The code essentially generates random messages and
+applies a degree 2 computation on them. The result is then checked.
 
 An executable can be built from that source file by running
 
 $ make test
 
-This will create the `test/sampleTest` executable which should, when run, print
-*Verification SUCCESSFUL* to standard output.
+This will create the `test/sampleTest` executable which should, when
+run, print *Verification SUCCESSFUL* to standard output.
+
+A similar file `test/cf_test.c` contains a usage example with the
+__cf13__ homomorphic MAC (to be compiled with `make cftest`).
 
 ### Compiler for homomorphic computations
 
@@ -201,6 +211,8 @@ wrote (e.g., `test/func_file`) as parameter.
 If you wish to use the compiled functions in your own code, you can
 stop at step 2 and use the code in `test/sample_test2.c` as reference.
 
+At the moment this compiler utility works only for __fgp__.
+
 --------------------------------------------------------------------------------
 Directory structure
 --------------------------------------------------------------------------------
@@ -209,10 +221,10 @@ The directory structure of the library is as follows:
 
 * src/ --- main C source code, which contains the following modules:
     * fgp/ --- implementation of the __fgp__ homomorphic MAC
-    	* tools/ --- implementation of the __fgp__ structures used by the protocol.
+	* cf13/ --- implementation of the __cf13__ homomorphic MAC
 	* utils/ --- implementation of some utility functions such as a
       pseudorandom function, conversions between various (big) integer
-      types, and error handling.
+      types, random numbers generaton, and error handling.
 * include/ --- headers files, following the same structure of src
 * test/ --- a test source file as described above
 	* func --- a directory with source files and headers associated with the function
